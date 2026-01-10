@@ -1,0 +1,175 @@
+
+#* ===== BUILD OUTPUTS (COMPILACIÓN) =====
+# Binarios y archivos compilados - se generan automáticamente
+bin/
+obj/
+out/
+
+#* ===== PAQUETES Y DEPENDENCIAS =====
+# NuGet packages - se restauran automáticamente con dotnet restore
+packages/
+*.nupkg
+*.snupkg
+# NuGet Symbol Packages
+*.symbols.nupkg
+# NuGet cache
+.nuget/
+
+#* ===== ARCHIVOS DE USUARIO (IDE ESPECÍFICOS) =====
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# MonoDevelop
+*.pidb
+*.svclog
+*.scc
+
+#* ===== ARCHIVOS DE SISTEMA =====
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+
+#* ===== ARCHIVOS TEMPORALES Y LOGS =====
+# Logs
+*.log
+logs/
+*.stackdump
+
+# Archivos temporales
+*.tmp
+*.temp
+*.cache
+*.bak
+*.swp
+*~.nib
+
+# Test Results
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+
+#* ===== ARCHIVOS DE BASE DE DATOS LOCAL =====
+# SQL Server Local DB
+*.mdf
+*.ldf
+*.ndf
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+#* ===== ARCHIVOS SENSIBLES =====
+# Archivos con secretos y configuraciones locales
+appsettings.Development.json
+appsettings.Local.json
+*.secrets.json
+secrets.json
+
+# Certificados y llaves
+*.pfx
+*.p12
+*.key
+*.pem
+*.cer
+
+# Variables de entorno
+.env
+.env.local
+.env.*.local
+
+#* ===== ASP.NET CORE =====
+# Archivos publicados
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*_i.c
+*_p.c
+*_i.h
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp_proj
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+
+# Publish profiles
+PublishProfiles/
+*.pubxml
+*.publishproj
+
+#* ===== ENTITY FRAMEWORK =====
+# Migrations - NOTA: Generalmente SÍ se incluyen en el repo
+# Descomenta la siguiente línea si NO quieres versionar las migraciones
+# Migrations/
+
+# Build frontend
+wwwroot/dist/
+wwwroot/lib/
+
+#* ===== OTROS =====
+# ReSharper
+_ReSharper*/
+*.resharper
+*.resharper.user
+
+# NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+# BenchmarkDotNet
+BenchmarkDotNet.Artifacts/
+
+# Azure Functions
+local.settings.json
+__blobstorage__
+__queuestorage__
+__azurite_db*__.json
+
+# Backup files
+*.bak
+*.backup
