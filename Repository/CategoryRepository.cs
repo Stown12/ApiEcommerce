@@ -51,7 +51,7 @@ public class CategoryRepository : ICategoryRepository
         //TODO: Implementar usando _db.Categories.OrderBy(c => c.Name).ToList()
         // OrderBy() = ordena alfabéticamente por nombre
         // ToList() = ejecuta la consulta SQL y convierte el resultado a lista
-        throw new NotImplementedException();
+        return _db.Categories.OrderBy(c => c.Name).ToList();
     }
 
     // Busca y retorna UNA categoría específica por su ID
@@ -59,7 +59,7 @@ public class CategoryRepository : ICategoryRepository
     {
         //TODO: Implementar usando _db.Categories.FirstOrDefault(c => c.Id == id)
         // FirstOrDefault() = retorna el primer elemento que cumple la condición, o null si no encuentra nada
-        throw new NotImplementedException();
+        return _db.Categories.FirstOrDefault(c => c.Id == id) ?? throw new InvalidOperationException($"Category {id} not exists");
     }
 
     //* ===== MÉTODOS DE MODIFICACIÓN (CREATE, UPDATE, DELETE) =====
@@ -70,7 +70,9 @@ public class CategoryRepository : ICategoryRepository
         //TODO: Implementar usando _db.Categories.Add(category)
         //! IMPORTANTE: Add() NO guarda inmediatamente, solo marca para inserción
         //! Debes llamar Save() después para ejecutar el INSERT en la BD
-        throw new NotImplementedException();
+        category.CreationDate = DateTime.Now;
+        _db.Categories.Add(category);
+        return Save();
     }
 
     // Actualiza una categoría EXISTENTE
@@ -79,7 +81,9 @@ public class CategoryRepository : ICategoryRepository
         //TODO: Implementar usando _db.Categories.Update(category)
         //! IMPORTANTE: Update() NO guarda inmediatamente, solo marca para actualización
         //! Debes llamar Save() después para ejecutar el UPDATE en la BD
-        throw new NotImplementedException();
+        category.CreationDate = DateTime.Now;
+        _db.Categories.Update(category);
+        return Save();
     }
 
     // Elimina una categoría de la base de datos
@@ -88,7 +92,8 @@ public class CategoryRepository : ICategoryRepository
         //TODO: Implementar usando _db.Categories.Remove(category)
         //! IMPORTANTE: Remove() NO elimina inmediatamente, solo marca para eliminación
         //! Debes llamar Save() después para ejecutar el DELETE en la BD
-        throw new NotImplementedException();
+        _db.Categories.Remove(category);
+        return Save();
     }
 
     // Guarda TODOS los cambios pendientes en la base de datos
@@ -98,6 +103,6 @@ public class CategoryRepository : ICategoryRepository
         // SaveChanges() = genera y ejecuta los comandos SQL necesarios (INSERT, UPDATE, DELETE)
         // Retorna el número de registros afectados
         // >= 0 significa éxito (incluso si no hubo cambios)
-        throw new NotImplementedException();
+        return _db.SaveChanges() >= 0;
     }
 }
