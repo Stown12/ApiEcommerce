@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using webApi.Repository;
+using webApi.Repository.IRespository;
 
 //* ========================================
 //* CONFIGURACIÓN PRINCIPAL DE LA APLICACIÓN
@@ -23,8 +25,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(dbConnectionString));
 
 //TODO: REGISTRAR EL REPOSITORY
-//! Descomentar esta línea cuando implementes el repository:
-// builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+// Registra AutoMapper en el contenedor de inyección de dependencias
+// AddAutoMapper = agrega AutoMapper como servicio
+// cfg.AddMaps(...) = escanea el ensamblado actual en busca de perfiles de m
+builder.Services.AddAutoMapper(cfg => 
+{
+    cfg.AddMaps(typeof(Program).Assembly);
+});
+
 //? ¿Qué hace? Le dice a ASP.NET: "Cuando alguien pida ICategoryRepository, dale CategoryRepository"
 
 //? CONFIGURACIÓN DE CONTROLADORES
