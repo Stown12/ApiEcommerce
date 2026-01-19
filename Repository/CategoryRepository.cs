@@ -55,11 +55,11 @@ public class CategoryRepository : ICategoryRepository
     }
 
     // Busca y retorna UNA categoría específica por su ID
-    public Category GetCategory(int id)
+    public Category? GetCategory(int id)
     {
         //TODO: Implementar usando _db.Categories.FirstOrDefault(c => c.Id == id)
         // FirstOrDefault() = retorna el primer elemento que cumple la condición, o null si no encuentra nada
-        return _db.Categories.FirstOrDefault(c => c.Id == id) ?? throw new InvalidOperationException($"Category {id} not exists");
+        return _db.Categories.FirstOrDefault(c => c.Id == id);
     }
 
     //* ===== MÉTODOS DE MODIFICACIÓN (CREATE, UPDATE, DELETE) =====

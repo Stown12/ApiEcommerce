@@ -58,7 +58,7 @@ namespace webApi.Controllers
 
         //* se define el endpoint para obtener una categoría por su ID
         //? GET: api/categories/{id}
-        [HttpGet("{id: int}", Name = "GetCategory")]
+        [HttpGet("{id:int}", Name = "GetCategory")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -69,7 +69,7 @@ namespace webApi.Controllers
             // Verifica si la categoría existe
             if (!_categoryRepository.CategoryExists(id))
             {
-                return NotFound(); // Retorna 404 si no existe
+                return NotFound($"Category {id} not exists"); // Retorna 404 si no existe
             }
 
             // Obtiene la categoría desde el repositorio
@@ -80,6 +80,116 @@ namespace webApi.Controllers
 
             // Retorna la categoría en formato DTO
             return Ok(categoryDto);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //*FromBody indica que los datos vienen en el cuerpo de la solicitud HTTP
+        //*Otro ejemplos: [FromQuery] (viene en la URL), [FromRoute] (viene en la ruta)
+        public IActionResult CreateCategory([FromBody] CreateCategoryDto createCategoryDto)
+        {
+            //*ModelState representa el estado de validación del modelo, es decir, si los datos recibidos cumplen con las reglas definidas en el DTO
+            if(createCategoryDto == null)
+            {
+                return BadRequest(ModelState);
+            }
+            if(_categoryRepository.CategoryExists(createCategoryDto.Name))
+            {
+                ModelState
+                .AddModelError("CustomError", "Category already exists!");
+                return BadRequest(ModelState);
+            }
+
+            var category = _mapper.Map<Category>(createCategoryDto);
+            
+            if(!_categoryRepository.CreateCategory(category))
+            {
+                //*EL modelState es un diccionario que contiene el estad de validación del modelo que se recibio en la peticion
+                //* almacena errores de validación y otros mensajes relacionados con el modelo
+                //*valida las data annotations y otras reglas de validación definidas en el DTO
+                ModelState.AddModelError("CustomError", "Something went wrong while saving the category");
+                return StatusCode(500, ModelState);
+            }
+            //* CreatedAtRoute es un metodo de ASP.NET que se usa despues de crear un recurso exitosamente
+            //* retorna un codigo de estado 201 (Created), agrega la cabecera Location con la URL del nuevo recurso
+            //* y opcionalmente incluye el recurso creado en el cuerpo de la respuesta
+            return CreatedAtRoute("GetCategory", new {id = category.Id}, category);
+        }
+
+        [HttpPatch("id:int", Name = "UpdateCategory")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //*FromBody indica que los datos vienen en el cuerpo de la solicitud HTTP
+        //*Otro ejemplos: [FromQuery] (viene en la URL), [FromRoute] (viene en la ruta)
+        public IActionResult UpdateCategory(int id, [FromBody] CreateCategoryDto updateCategoryDto)
+        {
+            if(!_categoryRepository.CategoryExists(id))
+            {
+                return NotFound($"Category {id} not exists");
+            }
+            //*ModelState representa el estado de validación del modelo, es decir, si los datos recibidos cumplen con las reglas definidas en el DTO
+            if(updateCategoryDto == null)
+            {
+                return BadRequest(ModelState);
+            }
+            
+            if(_categoryRepository.CategoryExists(updateCategoryDto.Name))
+            {
+                ModelState
+                .AddModelError("CustomError", "Category already exists!");
+                return BadRequest(ModelState);
+            }
+
+            var category = _mapper.Map<Category>(updateCategoryDto);
+            category.Id = id; // Asegura que el ID sea el correcto
+            
+            if(!_categoryRepository.UpdateCategory(category))
+            {
+               
+                ModelState.AddModelError("CustomError", "Something went wrong while updating the category");
+                return StatusCode(500, ModelState);
+            }
+           //* NoContent() = Retorna un código 204 indicando que la operación fue exitosa pero no hay contenido para retornar
+            return NoContent();
+        }
+
+        [HttpDelete("id:int", Name = "DeleteCategory")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //*FromBody indica que los datos vienen en el cuerpo de la solicitud HTTP
+        //*Otro ejemplos: [FromQuery] (viene en la URL), [FromRoute] (viene en la ruta)
+        public IActionResult DeleteCategory(int id)
+        {
+            if(!_categoryRepository.CategoryExists(id))
+            {
+                return NotFound($"Category {id} not exists");
+            }
+
+            var category = _categoryRepository.GetCategory(id);
+
+             if(category == null)
+            {
+                return NotFound($"Category {id} not exists");
+            }
+            
+            if(!_categoryRepository.DeleteCategory(category))
+            {
+               
+                ModelState.AddModelError("CustomError", "Something went wrong while deleting the category");
+                return StatusCode(500, ModelState);
+            }
+           //* NoContent() = Retorna un código 204 indicando que la operación fue exitosa pero no hay contenido para retornar
+            return NoContent();
         }
 
     }

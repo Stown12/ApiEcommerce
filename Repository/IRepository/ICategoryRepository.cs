@@ -19,7 +19,7 @@ public interface ICategoryRepository
     // Obtiene UNA categoría específica por su ID
     // Parámetro: id - ID de la categoría a buscar
     // Retorna: La categoría encontrada o null si no existe
-    Category GetCategory(int id);
+    Category? GetCategory(int id);
     
     // Verifica si una categoría EXISTE en la BD por ID numérico
     // Parámetro: id - ID de la categoría a verificar
