@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using webApi.Models;
 
 //* ========================================
 //* DB CONTEXT - PUENTE CON LA BASE DE DATOS
@@ -23,6 +24,9 @@ public class ApplicationDbContext : DbContext
     // Permite hacer consultas LINQ sobre esta tabla
     // Ejemplos: Categories.Where(...), Categories.Add(...), Categories.Remove(...)
     public DbSet<Category> Categories { get; set; }
+
+    public DbSet<Product> Products { get; set; }
+
     
     //? ¿Quieres agregar más tablas? Crea más DbSet aquí
     // Ejemplo: public DbSet<Product> Products { get; set; }
