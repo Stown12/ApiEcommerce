@@ -149,5 +149,36 @@ namespace webApi.Controllers
             return Ok(productDto);
 
         }
+        
+        [HttpPatch("buyProduct/{name}/{quantity:int}", Name = "BuyProduct")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        
+        public IActionResult BuyProducts(string name, int quantity)
+        {
+            if (string.IsNullOrEmpty(name) || quantity <= 0)
+            {
+                return BadRequest($"The product name or quantity is invalid");
+            }
+
+            var foundProduct = _productRepository.ProductExists(name);
+            if(!foundProduct)
+            {
+                return NotFound($"The product with name: {name} does not exists");
+            }
+
+            if (!_productRepository.BuyProduct(name, quantity))
+            {
+                ModelState.AddModelError("CustomError", $"Can't buy the product with {name} or it has not enough stock");
+                return BadRequest(ModelState);
+            }
+            
+            var units = quantity == 1 ? "unit" : "units";
+            return Ok($"You have bought {quantity} {units} of {name} successfully");
+
+
+        }
     }
 }
