@@ -8,7 +8,7 @@ public interface IProductRepository
     ICollection<Product> GetProducts();
 
     ICollection<Product> GetProductForCategory(int categoryId);
-    ICollection<Product> SearchProduct(string name);
+    ICollection<Product> SearchProducts(string searchTerm);
 
     Product? GetProduct(int productId);
 

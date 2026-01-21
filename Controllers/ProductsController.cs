@@ -112,7 +112,7 @@ namespace webApi.Controllers
             return CreatedAtRoute("GetProduct", new {productId = product.ProductId}, productDto);
         }
         
-        [HttpGet("searchByCategory/{categoryId:int}", Name = "GetProductByCategory")]
+        [HttpGet("searchProductByCategory/{categoryId:int}", Name = "GetProductByCategory")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -124,6 +124,25 @@ namespace webApi.Controllers
             if (product.Count == 0)
             {
                 return NotFound($"The products with category id: {categoryId} does not exists");
+            }
+
+            var productDto = _mapper.Map<List<ProductDto > >(product); 
+            return Ok(productDto);
+
+        }
+        
+        [HttpGet("searchProductByDescription/{searchTerm}", Name = "SearchProducts")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        
+        public IActionResult SearchProduct(string searchTerm)
+        {
+            var product = _productRepository.SearchProducts(searchTerm);
+            if (product.Count == 0)
+            {
+                return NotFound($"The products with category id: {searchTerm} does not exists");
             }
 
             var productDto = _mapper.Map<List<ProductDto > >(product); 
