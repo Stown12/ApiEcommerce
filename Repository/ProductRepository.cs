@@ -1,4 +1,5 @@
 using System;
+using Microsoft.EntityFrameworkCore;
 using webApi.Models;
 using webApi.Repository.IRepository;
 
@@ -14,7 +15,7 @@ public class ProductRepository : IProductRepository
     }
     public bool BuyProduct(string name, int quantity)
     {
-        if(string.IsNullOrEmpty(name) || | quantity <= 0)
+        if(string.IsNullOrEmpty(name) || quantity <= 0)
         {
             return false;
         }
@@ -61,41 +62,71 @@ public class ProductRepository : IProductRepository
         {
             return null;
         }
-        return _db.Products.FirstOrDefault(p => p.ProductId == productId);
+        return _db.Products.Include(p => p.category).FirstOrDefault(p => p.ProductId == productId);
     }
 
     public ICollection<Product> GetProductForCategory(int categoryId)
     {
-        return [.. _db.Products.OrderBy(p => p.Name)];
+        if(categoryId <= 0)
+        {
+            return new List<Product>();
+        }
+
+        return [.. _db.Products.Include(p => p.category).Where(p => p.CategoryId == categoryId).OrderBy(p => p.Name)];
     }
 
     public ICollection<Product> GetProducts()
     {
-        throw new NotImplementedException();
+        return [.. _db.Products.Include(p => p.category).OrderBy(p => p.Name)];
     }
 
     public bool ProductExists(int productId)
     {
-        throw new NotImplementedException();
+        if(productId <= 0)
+        {
+            return false;
+        }
+
+        return _db.Products.Any(p => p.ProductId == productId);
     }
 
     public bool ProductExists(string name)
     {
-        throw new NotImplementedException();
+        if(string.IsNullOrEmpty(name))
+        {
+            return false;
+        }
+
+        return _db.Products.Any(p => p.Name.ToLower().Trim() == name.ToLower().Trim());
+
     }
 
     public bool Save()
     {
-        throw new NotImplementedException();
+        return _db.SaveChanges() >= 0;
     }
 
     public ICollection<Product> SearchProduct(string name)
     {
-        throw new NotImplementedException();
+        IQueryable<Product> query = _db.Products;
+
+        if(!string.IsNullOrEmpty(name))
+        {
+            query = query.Where(p => p.Name.ToLower().Trim().Contains(name.ToLower().Trim()));
+        }
+
+        return [.. query.OrderBy(p => p.Name)];
     }
 
     public bool UpdateProduct(Product product)
     {
-        throw new NotImplementedException();
+        if(product == null)
+        {
+            return false;
+        }
+
+        product.UpdateDate = DateTime.Now;
+        _db.Products.Update(product);
+        return Save();
     }
 }

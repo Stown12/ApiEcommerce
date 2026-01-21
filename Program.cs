@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using webApi.Repository;
+using webApi.Repository.IRepository;
 using webApi.Repository.IRespository;
 
 //* ========================================
@@ -24,8 +25,10 @@ var dbConnectionString = builder.Configuration.GetConnectionString("Conexionsql"
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseSqlServer(dbConnectionString));
 
-//TODO: REGISTRAR EL REPOSITORY
+//TODO: REGISTRAR Los REPOSITORY
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
 
 // Registra AutoMapper en el contenedor de inyección de dependencias
 // AddAutoMapper = agrega AutoMapper como servicio
